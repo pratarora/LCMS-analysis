@@ -1,4 +1,6 @@
 rm(list=ls())
+options(digits=9)
+
 setwd("C:/Users/prata/Desktop/Elucidata/LCMS analysis/LCMS-analysis/")
 getwd()
 metadata <- read.csv("sample_metadata.csv", header = TRUE)
@@ -113,6 +115,56 @@ dev.copy(pdf,
          height= 8,
          width=12)
 dev.off()
+
+pool_total_T <- add_rownames(pool_total) %>% 
+  gather(var, value, -rowname) %>% 
+  spread(rowname, value) 
+
+names(pool_total_T)[names(pool_total_T)=="var"] <- "Sample"
+colnames(pool_total_T) <- unlist(pool_total_T[1,],use.names=FALSE)
+pool_total_T <- pool_total_T[-1,]
+
+pool_total_T[,2:ncol(pool_total_T)] <- sapply(pool_total_T[,2:ncol(pool_total_T)], as.double)
+str(pool_total_T)
+
+
+
+for (i in 2:ncol(pool_total_T)) {
+  p <- ggplot(pool_total_T,
+              aes(x=unlist(pool_total_T[,i],use.names=FALSE)))+
+    geom_histogram(bins=10)
+  print(p)
+}
+
+pool_total_T_log <-pool_total_T 
+
+for (i in 2:ncol(pool_total_T_log)) {
+  pool_total_T_log[,i] <- log10(pool_total_T[,i]+1) %>% as.vector
+  
+}
+
+for (i in 2:ncol(pool_total_T_log)) {
+  p <- ggplot(pool_total_T_log,
+              aes(x=unlist(pool_total_T_log[,i],use.names=FALSE)))+
+    geom_histogram(bins=10)
+  print(p)
+}
+
+pca.labels_T <- pool_total_T_log$compound
+pca.log_T <- prcomp(pool_total_T_log[,c(2:ncol(pool_total))])
+
+pca.log_T$sdev
+screeplot(pca.log_T, type="lines",col=3)
+pca.log_T$rotation
+summary(pca.log_T)
+
+ggbiplot(pca.log_T, ellipse=TRUE, labels=pca.labels_T)
+dev.copy(pdf,
+         file="PCAlogTPC1PC2.pdf",
+         height= 8,
+         width=12)
+dev.off()
+
 
 totalgraph <- ggplot(fraction_enrichment,
                      aes(x=Time..mins.,
