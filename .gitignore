@@ -1,0 +1,16 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+sample_metadata.csv
+compound_rt_database.csv
+Maven_processed.csv
+Maven_corrected_for_analysis.csv
+Data with Pool and fractions.csv
+Maven_processed.csv
+Maven_processed_2.csv
+Maven_processed_2_corrected.csv
+Maven_processed_2_normalized.csv
+Maven_processed_2_poolafterdf.csv
+Maven_processed_2_poolbeforedf.csv
+sample_metadata.csv
