@@ -91,8 +91,8 @@ pca.labels <- pool_total_log$compound
 pca.log <- prcomp(pool_total_log[,c(2:ncol(pool_total))])
 
 pca.log$sdev
-screeplot(pca, type="lines",col=3)
-pca$rotation
+screeplot(pca.log, type="lines",col=3)
+pca.log$rotation
 summary(pca.log)
 
 ggbiplot(pca.log, ellipse=TRUE, labels=pca.labels)
@@ -150,8 +150,9 @@ for (i in 2:ncol(pool_total_T_log)) {
   print(p)
 }
 
+pca.T <- prcomp(pool_total_T[])
 pca.labels_T <- pool_total_T_log$compound
-pca.log_T <- prcomp(pool_total_T_log[,c(2:ncol(pool_total))])
+pca.log_T <- prcomp(pool_total_T_log[,c(2:ncol(pool_total_T_log))])
 
 pca.log_T$sdev
 screeplot(pca.log_T, type="lines",col=3)
